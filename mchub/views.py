@@ -1,4 +1,5 @@
 from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
@@ -9,16 +10,22 @@ def login(request):
     else:
         username, password = request.POST['username'], request.POST['password']
         user = auth.authenticate(username=username, password=password)
-        return render(request, 'login.html', {'no_user_found': True})
+        if user:
+            auth.login(request, user)
+            return redirect(request.GET.get('next') or '/')
+        else:
+            return render(request, 'login.html', {'no_user_found': True})
 
-@csrf_exempt
+@login_required
 def logout(request):
-    request.COOKIE.delete_cookie('is_login')
-    request.COOKIE.delete_cookie('user')
+    auth.logout(request)
     return redirect('/')
 
 def root(request):
-    return render(request, 'index.html')
+    if request.user.is_authenticated:
+        return render(request, 'index-logined.html', {'username': request.user.username})
+    else:
+        return render(request, 'index.html')
 
 def signup(request):
     if request.method == 'GET':
@@ -34,5 +41,5 @@ def signup(request):
             if user.username == username:
                 return render(request, 'signup.html', {'not_available': True})
         else:
-            User.objects.create(username=username, password=password[0])
+            User.objects.create_user(username=username, password=password[0])
             return redirect('/login/')
