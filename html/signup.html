@@ -19,8 +19,15 @@
 		</nav>
 		<div class="m-3 p-1">
 			<h1>Create a new accountant</h1>
-			<form action="/login/" method="post">
+			<form action="/signup/" method="post">
 				{% csrf_token %}
+				{% if not_same %}
+				<p class="text-danger">Password not same!</p>
+				{% elif too_weak %}
+				<p class="text-danger">Passworld too short, at least 8 letters!</p>
+				{% elif not_available %}
+				<p class="text-danger">User name not available!</p>
+				{% endif %}
 				<div class="form-group row">
 					<label class="col-sm-2 col-form-label" for="username">User name</label>
 					<div class="col-sm-5">
