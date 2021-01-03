@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+	<head>
+		<title>mchub</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+	</head>
+	<body class="bg-dark">
+		{% load static %}
+		<nav class="navbar navbar-dark">
+			<div class="navbar-header">
+				<a href="" class="navbar-brand">
+					<img src="{% static 'images/icon.png' %}" class="rounded-sm" width="30" height="30">
+					mchub&nbsp;&nbsp;
+				</a>
+			</div>
+			<form class="form-inline">
+				<button class="btn btn-link"><a href="/signup/">Sign up</a></button>
+				<button class="btn btn-link"><a href="/login/">Log in</a></button>
+			</form>
+		</nav>
+			<div class="m-3 p-1">
+			<div class="jumbotron">
+				<h1 class="display-4">Welcome to mchub!</h1>
+				<p class="lead">mchub gives you a platform to create, stored, share creations about Minecraft.
+				</p>
+				<hr>
+				<a class="btn btn-primary btn-lg" href="/login/" role="button">Join us</a>
+			</div>
+		</div>
+	</body>
+</html>

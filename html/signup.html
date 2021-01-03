@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+	<head>
+		<title>mchub - sign up</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+	</head>
+	<body>
+		{% load static %}
+		<nav class="navbar navbar-light bg-light">
+			<div class="navbar-header">
+				<a href="/" class="navbar-brand">
+					<img src="{% static 'images/icon.png' %}" class="rounded-sm" width="30" height="30">
+					mchub&nbsp;&nbsp;
+				</a>
+			</div>
+			<form class="form-inline"></form>
+		</nav>
+		<div class="m-3 p-1">
+			<h1>Create a new accountant</h1>
+			<form action="/login/" method="post">
+				{% csrf_token %}
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label" for="username">User name</label>
+					<div class="col-sm-5">
+						<input class="form-control" id="username" placeholder="User name" name="username">
+						</input>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label" for="password">Password</label>
+					<div class="col-sm-5">
+						<input type="password" class="form-control" id="password" placeholder="Password" name="password">
+						</input>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label" for="verify">Verify</label>
+					<div class="col-sm-5">
+						<input type="password" class="form-control" id="verify" placeholder="Password" name="verify">
+						</input>
+					</div>
+				</div>
+
+				<button type="submit" class="btn btn-primary">Join us</button>
+			</form>
+		</div>
+		<footer>
+			<hr>
+			<p id="footer">Build with <a href="https://www.djangoproject.com/">Django 3.1.4</a>.</p>
+		</footer>
+	</body>
+</html>
