@@ -21,7 +21,7 @@
 			<h1>Sign in with mchub</h1>
 			<form action="/login/" method="post">
 				{% csrf_token %}
-				{% if no_user_found %}
+				{% if not_found %}
 				<p class="text-danger">Username or password wrong!</p>
 				{% endif %}
 				<div class="form-group row">

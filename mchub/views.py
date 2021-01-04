@@ -1,3 +1,5 @@
+import re
+
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -14,7 +16,7 @@ def login(request):
             auth.login(request, user)
             return redirect(request.GET.get('next') or '/')
         else:
-            return render(request, 'login.html', {'no_user_found': True})
+            return render(request, 'login.html', {'not_found': True})
 
 @login_required
 def logout(request):
@@ -29,17 +31,24 @@ def root(request):
 
 def signup(request):
     if request.method == 'GET':
-        return render(request, 'signup.html')
+        if request.user.is_authenticated:
+            return redirect('/')
+        else:
+            return render(request, 'signup.html')
     else:
         username = request.POST['username']
         password = [request.POST['password'], request.POST['verify']]
+        for user in User.objects.all():
+            if user.username == username:
+                return render(request, 'signup.html', {'existed': True})
+        if not re.match('^\w+$', username):
+            return render(request, 'signup.html', {'not_available': True})
+        if len(username) < 3:
+            return render(request, 'signup.html', {'not_available': True})
         if password[0] != password[1]:
             return render(request, 'signup.html', {'not_same': True})
         if len(password[0]) < 8:
             return render(request, 'signup.html', {'too_weak': True})
-        for user in User.objects.all():
-            if user.username == username:
-                return render(request, 'signup.html', {'not_available': True})
         else:
             User.objects.create_user(username=username, password=password[0])
             return redirect('/login/')
