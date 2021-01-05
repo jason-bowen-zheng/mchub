@@ -8,7 +8,10 @@ from django.views.decorators.csrf import csrf_exempt
 
 def login(request):
     if request.method == 'GET':
-        return render(request, 'login.html')
+        if request.user.is_authenticated:
+            return redirect('/')
+        else:
+            return render(request, 'login.html')
     else:
         username, password = request.POST['username'], request.POST['password']
         user = auth.authenticate(username=username, password=password)
@@ -18,7 +21,6 @@ def login(request):
         else:
             return render(request, 'login.html', {'not_found': True})
 
-@login_required
 def logout(request):
     auth.logout(request)
     return redirect('/')
