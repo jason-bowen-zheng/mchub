@@ -6,6 +6,24 @@ from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 
+from mchub import projects as proj
+
+def new(request):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            return render(request, 'new.html', {'username': request.user.username})
+        else:
+            return redirect('/')
+    else:
+        proj_name = request.POST['name']
+        if not re.match('^\w+$', proj_name):
+            return render(request, 'new.html', {'not_available': True})
+        elif proj.exist(request.user.username, proj_name):
+            return render(request, 'new.html', {'existed': True})
+        else:
+            proj.create_project(request.user.username, proj_name)
+            return redirect('/')
+
 def login(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
@@ -27,7 +45,10 @@ def logout(request):
 
 def root(request):
     if request.user.is_authenticated:
-        return render(request, 'index-logined.html', {'username': request.user.username})
+        return render(request, 'index-logined.html', {
+            'username': request.user.username,
+            'projects': proj.get_proj(request.user.username)
+        })
     else:
         return render(request, 'index.html')
 
@@ -52,5 +73,6 @@ def signup(request):
         if len(password[0]) < 8:
             return render(request, 'signup.html', {'too_weak': True})
         else:
+            proj.create_user(username)
             User.objects.create_user(username=username, password=password[0])
             return redirect('/login/')

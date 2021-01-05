@@ -17,6 +17,7 @@
 				</a>
 			</div>
 			<form class="form-inline">
+				<button class="btn btn-link"><a href="/">Explor</a></button>
 				<button class="btn btn-link"><a href="/logout/">Log out</a></button>
 			</form>
 		</nav>
@@ -25,12 +26,21 @@
 					<p align="center" class="text-secondary">@{{ username }}</p>
 					<hr>
 					<div class="clearfix p-2">
-						<b class="float-left">Projects</b>
-						<button class="btn btn-sm btn-success float-right">
+						<b class="float-left p-1">Projects</b>
+						<a href="/new/"><button class="btn btn-sm btn-success float-right">
 							&nbsp;New&nbsp;
-						</button>
+						</button></a>
 					</div>
 					<input class="form-control form-control-sm" type="text" placeholder="Find a project...">
+					<div>
+						<ul>
+							{% for proj in projects %}
+							<li><a href="/">{{ username }}/{{ proj|truncatechars:20 }}</a></li>
+							{% empty %}
+							<li color="text-secondary">No projects!</li>
+							{% endfor %}
+						</ul>
+					</div>
 				</div>
 				<div class="col border-left m-1 p-3">
 					<div class="jumbotron">
