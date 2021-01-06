@@ -11,17 +11,18 @@ from mchub import projects as proj
 def new(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
-            return render(request, 'new.html', {'username': request.user.username})
+            return render(request, 'new.html', {'username': request.user.username,})
         else:
             return redirect('/')
     else:
         proj_name = request.POST['name']
-        if not re.match('^\w+$', proj_name):
+        description = request.POST['desp']
+        if not re.match('^\w[\w-]*$', proj_name):
             return render(request, 'new.html', {'not_available': True})
         elif proj.exist(request.user.username, proj_name):
             return render(request, 'new.html', {'existed': True})
         else:
-            proj.create_project(request.user.username, proj_name)
+            proj.create_project(request.user.username, proj_name, description)
             return redirect('/')
 
 def login(request):
@@ -42,6 +43,27 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return redirect('/')
+
+def project(request, name, project):
+    if not proj.has_proj(name, project):
+        return redirect('/')
+    else:
+        if request.user.is_authenticated:
+            return render(request, 'project.html', {
+                'detail': proj.get_configure(name, project),
+                'logined': True,
+                'name': name,
+                'project': project,
+                'username': request.user.username
+            })
+        else:
+            return render(request, 'project.html', {
+                'detail': proj.get_configure(name, project),
+                'logined': False,
+                'name': name,
+                'project': project,
+                'username': ''
+            })
 
 def root(request):
     if request.user.is_authenticated:
@@ -64,7 +86,7 @@ def signup(request):
         for user in User.objects.all():
             if user.username == username:
                 return render(request, 'signup.html', {'existed': True})
-        if not re.match('^\w+$', username):
+        if not re.match('^\w[\w-]*$', username):
             return render(request, 'signup.html', {'not_available': True})
         if len(username) < 3:
             return render(request, 'signup.html', {'not_available': True})

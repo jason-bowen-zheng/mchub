@@ -27,7 +27,7 @@
 					<hr>
 					<div class="clearfix p-2">
 						<b class="float-left p-1">Projects</b>
-						<a href="/new/"><button class="btn btn-sm btn-success float-right">
+						<a href="/new/"><button class="btn btn-sm btn-success float-right shadow">
 							&nbsp;New&nbsp;
 						</button></a>
 					</div>
@@ -35,7 +35,9 @@
 					<div>
 						<ul>
 							{% for proj in projects %}
-							<li><a href="/">{{ username }}/{{ proj|truncatechars:20 }}</a></li>
+							<li><a href="/project/{{ username }}/{{ proj }}">
+									{{ username }}/{{ proj|truncatechars:20 }}
+							</a></li>
 							{% empty %}
 							<li color="text-secondary">No projects!</li>
 							{% endfor %}
@@ -44,7 +46,7 @@
 				</div>
 				<div class="col border-left m-1 p-3">
 					<div class="jumbotron">
-						<h1 class="display-4">Explor mchub</h1>
+						<h1 class="display-4">Explore mchub</h1>
 						<p class="lead">Find something interesting on mchub!</p>
 						<hr>
 						<a class="btn btn-primary btn-lg" href="/" role="button">Explor mchub</a>
