@@ -10,6 +10,7 @@ def create_project(name, proj, desp='', website=''):
     os.mkdir(os.path.join(BASE_DIR, 'projects', name, proj))
     dump({
             'description': desp,
+            'stars': 0,
             'website': website
         }, open(os.path.join(BASE_DIR, 'projects', name, proj, 'configure.json'), 'w+'), indent='\t')
 
@@ -30,3 +31,9 @@ def get_configure(name, proj):
 
 def get_proj(name):
     return os.listdir(os.path.join(BASE_DIR, 'projects', name))
+
+def set_configure(name, proj, desp, website):
+    cfg = load(open(os.path.join(BASE_DIR, 'projects', name, proj, 'configure.json')))
+    cfg['description'] = desp
+    cfg['website'] = website
+    dump(cfg, open(os.path.join(BASE_DIR, 'projects', name, proj, 'configure.json'), 'w+'), indent='\t')

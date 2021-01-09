@@ -8,10 +8,36 @@ from django.views.decorators.csrf import csrf_exempt
 
 from mchub import projects as proj
 
+def issues(request, name, project):
+    if not proj.has_proj(name, project):
+        return redirect('/')
+    else:
+        if request.user.is_authenticated:
+            return render(request, 'issues.html', {
+                'detail': proj.get_configure(name, project),
+                'logined': True,
+                'name': name,
+                'project': project,
+                'tab': 'issues',
+                'username': request.user.username
+            })
+        else:
+            return render(request, 'issues.html', {
+                'detail': proj.get_configure(name, project),
+                'logined': False,
+                'name': name,
+                'project': project,
+                'tab': 'issues',
+                'username': ''
+            })
+
 def new(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
-            return render(request, 'new.html', {'username': request.user.username,})
+            return render(request, 'new.html', {
+                'logined': True,
+                'username': request.user.username,
+            })
         else:
             return redirect('/')
     else:
@@ -24,6 +50,40 @@ def new(request):
         else:
             proj.create_project(request.user.username, proj_name, description)
             return redirect('/')
+
+def new_issue(request, name, project):
+    if request.method == 'GET':
+        if not proj.has_proj(name, project):
+            return redirect('/')
+        else:
+            if request.user.is_authenticated:
+                return render(request, 'new-issue.html', {
+                    'detail': proj.get_configure(name, project),
+                    'logined': True,
+                    'name': name,
+                    'project': project,
+                    'tab': 'issues',
+                    'username': request.user.username
+                })
+            else:
+                return render(request, 'new-issue.html', {
+                    'detail': proj.get_configure(name, project),
+                    'logined': False,
+                    'name': name,
+                    'project': project,
+                    'tab': 'issues',
+                    'username': ''
+                })
+    else:
+        title = request.POST['title']
+        comment = request.POST['comment'] or None
+        label = request.POST.get('label')
+        if label == 'none':
+            label = None
+        print('title:', title)
+        print('comment:', comment)
+        print('label:', label)
+        return redirect('/project/%s/%s/' % (name, project))
 
 def login(request):
     if request.method == 'GET':
@@ -45,25 +105,40 @@ def logout(request):
     return redirect('/')
 
 def project(request, name, project):
-    if not proj.has_proj(name, project):
-        return redirect('/')
-    else:
-        if request.user.is_authenticated:
-            return render(request, 'project.html', {
-                'detail': proj.get_configure(name, project),
-                'logined': True,
-                'name': name,
-                'project': project,
-                'username': request.user.username
-            })
+    if request.method == 'GET':
+        if not proj.has_proj(name, project):
+            return redirect('/')
         else:
-            return render(request, 'project.html', {
-                'detail': proj.get_configure(name, project),
-                'logined': False,
-                'name': name,
-                'project': project,
-                'username': ''
-            })
+            if request.user.is_authenticated:
+                return render(request, 'project.html', {
+                    'detail': proj.get_configure(name, project),
+                    'logined': True,
+                    'name': name,
+                    'project': project,
+                    'tab': 'code',
+                    'username': request.user.username
+                })
+            else:
+                return render(request, 'project.html', {
+                    'detail': proj.get_configure(name, project),
+                    'logined': False,
+                    'name': name,
+                    'project': project,
+                    'tab': 'code',
+                    'username': ''
+                })
+    else:
+        description = request.POST['desp']
+        website = request.POST['website']
+        proj.set_configure(name, project, description, website)
+        return render(request, 'project.html', {
+            'detail': proj.get_configure(name, project),
+            'logined': True,
+            'name': name,
+            'project': project,
+            'tab': 'code',
+            'username': request.user.username
+        })
 
 def root(request):
     if request.user.is_authenticated:
