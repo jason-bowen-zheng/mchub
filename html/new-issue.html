@@ -105,10 +105,10 @@
 					{% csrf_token %}
 					<div class="col-8 border rounded ml-3">
 						<input class="form-control mt-3 mb-3" name="title" placeholder="Title" required>
-						<textarea class="form-control mb-3" name="comment" rows="5" placeholder="Comment"></textarea>
+						<textarea class="form-control mb-3" name="comment " id="c" rows="5" placeholder="Comment" oninput="$('#p').html($('#c').val()==''?'<i class=text-secondary>Nothing to preview.</i>':$('#c').val());"></textarea>
 						<div class="collapse mb-3" id="preview">
-							<div class="card card-body">
-								Nothing to preview.
+							<div class="card card-body" id="p">
+								<i class="text-secondary">Nothing to preview.</i>
 							</div>
 						</div>
 						<div class="clearfix mb-2">
