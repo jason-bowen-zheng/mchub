@@ -83,7 +83,7 @@ def new_issue(request, name, project):
         print('title:', title)
         print('comment:', comment)
         print('label:', label)
-        return redirect('/project/%s/%s/' % (name, project))
+        return redirect('/%s/%s/' % (name, project))
 
 def login(request):
     if request.method == 'GET':
@@ -162,6 +162,8 @@ def signup(request):
             if user.username == username:
                 return render(request, 'signup.html', {'existed': True})
         if not re.match('^\w[\w-]*$', username):
+            return render(request, 'signup.html', {'not_available': True})
+        if username in ['new']:
             return render(request, 'signup.html', {'not_available': True})
         if len(username) < 3:
             return render(request, 'signup.html', {'not_available': True})

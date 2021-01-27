@@ -10,7 +10,8 @@ Class-based views
     1. Add an import:  from other_app.views import Home
     2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
 Including another URLconf
-    1. Import the include() function: from django.urls import include, path
+    _mulu 
+    . Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
@@ -21,11 +22,11 @@ from . import views
 urlpatterns = [
         path('', views.root),
         path('admin/', admin.site.urls),
-        path('issues/<slug:name>/<slug:project>/', views.issues),
-        path('issues/<slug:name>/<slug:project>/new/', views.new_issue),
+        path('<slug:name>/<slug:project>/issues', views.issues),
+        path('<slug:name>/<slug:project>/issues/new', views.new_issue),
         path('login/', views.login),
         path('logout/', views.logout),
         path('new/', views.new),
-        path('project/<slug:name>/<slug:project>/', views.project),
         path('signup/', views.signup),
+        path('<slug:name>/<slug:project>/', views.project),
 ]
