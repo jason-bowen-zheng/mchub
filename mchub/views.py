@@ -49,7 +49,7 @@ def new(request):
             return render(request, 'new.html', {'existed': True})
         else:
             proj.create_project(request.user.username, proj_name, description)
-            return redirect('/')
+            return redirect('/%s/%s' % (request.user.username, proj_name))
 
 def new_issue(request, name, project):
     if request.method == 'GET':
